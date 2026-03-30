@@ -1,0 +1,17 @@
+# Routes
+# https://www.playframework.com/documentation/3.0.x/JavaRouting
+
+# Preset CRUD
+GET     /api/presets                 controllers.PresetController.list(page: Integer ?= 0, size: Integer ?= 20, defaultOnly: Boolean ?= false)
+GET     /api/presets/popular         controllers.PresetController.popular(limit: Integer ?= 10)
+GET     /api/presets/shared/:code    controllers.PresetController.getByShareCode(code: String)
+GET     /api/presets/:id             controllers.PresetController.get(id: java.util.UUID)
+POST    /api/presets                 controllers.PresetController.create(request: Request)
+PUT     /api/presets/:id             controllers.PresetController.update(id: java.util.UUID, request: Request)
+DELETE  /api/presets/:id             controllers.PresetController.delete(id: java.util.UUID)
+
+# Like
+POST    /api/presets/:id/like        controllers.PresetController.toggleLike(id: java.util.UUID, request: Request)
+
+# Health check
+GET     /api/health                  controllers.PresetController.health()
