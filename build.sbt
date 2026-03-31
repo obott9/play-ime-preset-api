@@ -5,15 +5,14 @@ version := "1.0-SNAPSHOT"
 lazy val root = (project in file("."))
   .enablePlugins(PlayJava, PlayEbean)
 
-scalaVersion := "2.13.16"
+scalaVersion := "2.13.18"
 
 // Play Framework 3.0.10 (Pekko-based)
 libraryDependencies ++= Seq(
   guice,
   jdbc,
   "org.postgresql" % "postgresql" % "42.7.5",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.18.3",
-  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % "2.18.3"
+  "com.fasterxml.jackson.datatype" % "jackson-datatype-jsr310" % "2.14.3"
 )
 
 // Java 21
