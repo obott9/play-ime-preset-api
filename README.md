@@ -2,7 +2,7 @@
 
 A REST API server for managing IME indicator clock presets, built with **Play Framework 3.0** and **Java 21**.
 
-Connects to the existing [IME Simulator](https://obott9.github.io/ime-simulator/) Supabase PostgreSQL database to provide full CRUD operations on preset configurations.
+Connects to a Supabase PostgreSQL database (same schema as [IME Simulator](https://obott9.github.io/ime-simulator/)) to provide full CRUD operations on preset configurations.
 
 ## Tech Stack
 
@@ -10,7 +10,7 @@ Connects to the existing [IME Simulator](https://obott9.github.io/ime-simulator/
 - **Java 21** (LTS)
 - **Ebean ORM** (Play standard Java ORM)
 - **PostgreSQL** (Supabase)
-- **sbt 1.10.11** (Build tool)
+- **sbt** (Build tool)
 
 ## API Endpoints
 
@@ -33,26 +33,30 @@ Connects to the existing [IME Simulator](https://obott9.github.io/ime-simulator/
 - Java 21+
 - sbt 1.9+
 
-### Configuration
+### 1. Create Supabase Project
 
-1. Copy `.env.example` to `.env` and fill in your Supabase credentials:
+1. Create a free project at [supabase.com](https://supabase.com)
+2. Open **SQL Editor** and run `supabase-setup.sql` to create tables and seed data
+
+### 2. Configure Environment
+
+Copy `.env.example` to `.env` and fill in your Supabase credentials:
 
 ```bash
 cp .env.example .env
 ```
 
-2. Set environment variables (or use `.env` with a plugin):
+To find your credentials:
+1. Open your Supabase project dashboard
+2. Click **Connect** (top bar)
+3. Select **Direct** tab > **Session pooler**
+4. Copy `host`, `port`, and `user` values
+5. DB password is what you set when creating the project (can be reset in Database Settings)
+
+### 3. Run
 
 ```bash
-export SUPABASE_DB_HOST=db.xxxxxxxxxxxx.supabase.co
-export SUPABASE_DB_PASSWORD=your-password
-export SUPABASE_PROJECT_REF=xxxxxxxxxxxx
-```
-
-### Run
-
-```bash
-sbt run
+export $(cat .env | xargs) && sbt run
 ```
 
 Server starts at `http://localhost:9000`.
@@ -69,18 +73,13 @@ curl http://localhost:9000/api/presets
 # Get default presets only
 curl "http://localhost:9000/api/presets?defaultOnly=true"
 
-# Create a preset
-curl -X POST http://localhost:9000/api/presets \
-  -H "Content-Type: application/json" \
-  -d '{"name": "My Theme", "settings": {"clock": {"mode": "digital"}}}'
-
 # Popular presets
 curl http://localhost:9000/api/presets/popular?limit=5
 ```
 
-## Development
+## Scala Version
 
-This project was developed in collaboration with Claude AI (architecture design, code generation, documentation).
+See [play-ime-preset-dashboard](https://github.com/obott9/play-ime-preset-dashboard) for the Scala 2.13 + Slick + Pekko Streams version.
 
 ## Support
 
