@@ -1,21 +1,42 @@
+[English](README.md) | [日本語](README_ja.md)
+
 # Play IME Preset API
 
 A REST API server for managing IME indicator clock presets, built with **Play Framework 3.0** and **Java 21**.
 
-Connects to a Supabase PostgreSQL database (same schema as [IME Simulator](https://obott9.github.io/ime-simulator/)) to provide full CRUD operations on preset configurations.
+Connects to a Supabase PostgreSQL database (same schema as [IME Simulator](https://obott9.github.io/ime-simulator/)) to provide full CRUD operations on preset configurations. Includes a built-in admin dashboard for browser-based data management.
+
+## Screenshots
+
+| Admin Dashboard | Preset Editor |
+|:---:|:---:|
+| ![Admin Dashboard](docs/images/admin_list.png) | ![Preset Editor](docs/images/admin_edit_clock.png) |
 
 ## Tech Stack
 
-- **Play Framework 3.0.10** (Pekko-based)
-- **Java 21** (LTS)
-- **Ebean ORM** (Play standard Java ORM)
-- **PostgreSQL** (Supabase)
-- **sbt** (Build tool)
+| Component | Technology |
+|-----------|-----------|
+| Framework | [Play Framework 3.0.10](https://www.playframework.com/) (Pekko-based) |
+| Language | Java 21 (LTS) |
+| ORM | [Ebean](https://ebean.io/) (Play standard Java ORM) |
+| Database | PostgreSQL ([Supabase](https://supabase.com/)) |
+| Build | sbt 1.10 |
+
+## Features
+
+- **Full CRUD** — Create, read, update, delete presets via REST API
+- **Admin Dashboard** — Browser-based UI at `/admin` with visual settings editor (color pickers, sliders, per-language indicator config)
+- **Pagination** — Configurable page size with total count
+- **Share Codes** — Unique codes for preset sharing
+- **Like System** — Toggle likes with user tracking
+- **Popular Presets** — Ranked by like count
+- **Health Check** — Server status endpoint
 
 ## API Endpoints
 
 | Method | Path | Description |
 |--------|------|-------------|
+| `GET` | `/admin` | Admin dashboard (browser UI) |
 | `GET` | `/api/presets` | List presets (paginated) |
 | `GET` | `/api/presets/:id` | Get preset by ID |
 | `POST` | `/api/presets` | Create preset |
@@ -40,13 +61,11 @@ Connects to a Supabase PostgreSQL database (same schema as [IME Simulator](https
 
 ### 2. Configure Environment
 
-Copy `.env.example` to `.env` and fill in your Supabase credentials:
-
 ```bash
 cp .env.example .env
 ```
 
-To find your credentials:
+To find your Supabase credentials:
 1. Open your Supabase project dashboard
 2. Click **Connect** (top bar)
 3. Select **Direct** tab > **Session pooler**
@@ -59,33 +78,61 @@ To find your credentials:
 export $(cat .env | xargs) && sbt run
 ```
 
-Server starts at `http://localhost:9000`.
+Open `http://localhost:9000/admin` in your browser.
 
-### Example Requests
+### Example API Requests
 
 ```bash
 # Health check
 curl http://localhost:9000/api/health
 
-# List presets
+# List presets (paginated)
 curl http://localhost:9000/api/presets
 
-# Get default presets only
+# Default presets only
 curl "http://localhost:9000/api/presets?defaultOnly=true"
 
-# Popular presets
-curl http://localhost:9000/api/presets/popular?limit=5
+# Popular presets (top 5)
+curl "http://localhost:9000/api/presets/popular?limit=5"
 ```
 
-## Scala Version
+## Project Structure
 
-See [play-ime-preset-dashboard](https://github.com/obott9/play-ime-preset-dashboard) for the Scala 2.13 + Slick + Pekko Streams version.
+```
+app/
+  controllers/
+    PresetController.java    # REST API endpoints
+  models/
+    Preset.java              # Ebean entity model
+    Like.java                # Like entity model
+conf/
+  application.conf           # Play + Ebean + CORS config
+  routes                     # URL routing
+public/
+  admin.html                 # Admin dashboard (single-file SPA)
+```
+
+## Related Projects
+
+| Project | Description |
+|---------|-------------|
+| [play-ime-preset-dashboard](https://github.com/obott9/play-ime-preset-dashboard) | Same API in **Scala 2.13** + Slick + Pekko Streams |
+| [IME Simulator](https://github.com/obott9/ime-simulator) | React frontend that consumes this API |
+| [IMEIndicatorClock](https://github.com/obott9/IMEIndicatorClock) | macOS desktop app that uses these presets |
+| [IMEIndicatorClockW](https://github.com/obott9/IMEIndicatorClockW) | Windows desktop app that uses these presets |
+
+## Note
+
+The admin dashboard is for **local development and demonstration only**. It provides unrestricted access to all data without authentication. For production use, the [IME Simulator](https://github.com/obott9/ime-simulator) frontend implements Supabase Auth with ownership-based access control.
+
+## License
+
+[MIT](LICENSE)
 
 ## Support
 
 If you find this project useful:
 
-[![GitHub Stars](https://img.shields.io/github/stars/obott9/play-ime-preset-api?style=social)](https://github.com/obott9/play-ime-preset-api)
 [![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa)](https://github.com/sponsors/obott9)
 [![Ko-fi](https://img.shields.io/badge/Ko--fi-Support-F16061)](https://ko-fi.com/obott9)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow)](https://buymeacoffee.com/obott9)

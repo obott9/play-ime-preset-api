@@ -1,0 +1,122 @@
+[English](README.md) | [日本語](README_ja.md)
+
+# Play IME Preset API
+
+**Play Framework 3.0** と **Java 21** で構築した、IMEインジケータ時計プリセット管理用REST APIサーバー。
+
+[IME Simulator](https://obott9.github.io/ime-simulator/) と同じスキーマの Supabase PostgreSQL データベースに接続し、プリセット設定のフルCRUD操作を提供。ブラウザベースの管理ダッシュボードを内蔵。
+
+## スクリーンショット
+
+| 管理ダッシュボード | プリセットエディタ |
+|:---:|:---:|
+| ![管理ダッシュボード](docs/images/admin_list.png) | ![プリセットエディタ](docs/images/admin_edit_clock.png) |
+
+## 技術スタック
+
+| コンポーネント | 技術 |
+|-----------|-----------|
+| フレームワーク | [Play Framework 3.0.10](https://www.playframework.com/) (Pekko ベース) |
+| 言語 | Java 21 (LTS) |
+| ORM | [Ebean](https://ebean.io/) (Play 標準 Java ORM) |
+| データベース | PostgreSQL ([Supabase](https://supabase.com/)) |
+| ビルド | sbt 1.10 |
+
+## 機能
+
+- **フル CRUD** — REST API によるプリセットの作成・取得・更新・削除
+- **管理ダッシュボード** — `/admin` でアクセスするブラウザベース UI（カラーピッカー、スライダー、言語別インジケータ設定のビジュアルエディタ付き）
+- **ページネーション** — 件数設定可能、合計件数付き
+- **共有コード** — プリセット共有用のユニークコード
+- **いいねシステム** — ユーザー追跡付きのいいねトグル
+- **人気プリセット** — いいね数でランキング
+- **ヘルスチェック** — サーバー状態確認エンドポイント
+
+## API エンドポイント
+
+| メソッド | パス | 説明 |
+|--------|------|-------------|
+| `GET` | `/admin` | 管理ダッシュボード（ブラウザ UI） |
+| `GET` | `/api/presets` | プリセット一覧（ページネーション） |
+| `GET` | `/api/presets/:id` | ID でプリセット取得 |
+| `POST` | `/api/presets` | プリセット作成 |
+| `PUT` | `/api/presets/:id` | プリセット更新 |
+| `DELETE` | `/api/presets/:id` | プリセット削除 |
+| `GET` | `/api/presets/shared/:code` | 共有コードで取得 |
+| `POST` | `/api/presets/:id/like` | いいねトグル |
+| `GET` | `/api/presets/popular` | 人気プリセット |
+| `GET` | `/api/health` | ヘルスチェック |
+
+## セットアップ
+
+### 必要条件
+
+- Java 21+
+- sbt 1.9+
+
+### 1. Supabase プロジェクト作成
+
+1. [supabase.com](https://supabase.com) で無料プロジェクトを作成
+2. **SQL Editor** を開き、`supabase-setup.sql` を実行してテーブルとシードデータを作成
+
+### 2. 環境設定
+
+```bash
+cp .env.example .env
+```
+
+Supabase の認証情報の確認方法:
+1. Supabase プロジェクトのダッシュボードを開く
+2. 上部バーの **Connect** をクリック
+3. **Direct** タブ > **Session pooler** を選択
+4. `host`、`port`、`user` の値をコピー
+5. DB パスワードはプロジェクト作成時に設定したもの（Database Settings でリセット可能）
+
+### 3. 起動
+
+```bash
+export $(cat .env | xargs) && sbt run
+```
+
+ブラウザで `http://localhost:9000/admin` を開く。
+
+## プロジェクト構成
+
+```
+app/
+  controllers/
+    PresetController.java    # REST API エンドポイント
+  models/
+    Preset.java              # Ebean エンティティモデル
+    Like.java                # Like エンティティモデル
+conf/
+  application.conf           # Play + Ebean + CORS 設定
+  routes                     # URL ルーティング
+public/
+  admin.html                 # 管理ダッシュボード（単一ファイル SPA）
+```
+
+## 関連プロジェクト
+
+| プロジェクト | 説明 |
+|---------|-------------|
+| [play-ime-preset-dashboard](https://github.com/obott9/play-ime-preset-dashboard) | 同じ API を **Scala 2.13** + Slick + Pekko Streams で実装 |
+| [IME Simulator](https://github.com/obott9/ime-simulator) | この API を利用する React フロントエンド |
+| [IMEIndicatorClock](https://github.com/obott9/IMEIndicatorClock) | これらのプリセットを使用する macOS デスクトップアプリ |
+| [IMEIndicatorClockW](https://github.com/obott9/IMEIndicatorClockW) | これらのプリセットを使用する Windows デスクトップアプリ |
+
+## 注意
+
+管理ダッシュボードは**ローカル開発・デモンストレーション専用**です。認証なしで全データにアクセスできます。本番環境では [IME Simulator](https://github.com/obott9/ime-simulator) フロントエンドが Supabase Auth による所有権ベースのアクセス制御を実装しています。
+
+## ライセンス
+
+[MIT](LICENSE)
+
+## サポート
+
+このプロジェクトが役に立ったら、サポートをご検討ください:
+
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa)](https://github.com/sponsors/obott9)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-Support-F16061)](https://ko-fi.com/obott9)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow)](https://buymeacoffee.com/obott9)
