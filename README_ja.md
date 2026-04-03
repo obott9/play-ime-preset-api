@@ -100,7 +100,7 @@ public/
 
 | プロジェクト | 説明 |
 |---------|-------------|
-| [play-ime-preset-dashboard](https://github.com/obott9/play-ime-preset-dashboard) | 同じ API を **Scala 2.13** + Slick + Pekko Streams で実装 |
+| [play-ime-preset-dashboard](https://github.com/obott9/play-ime-preset-dashboard) | 同じ API を **Scala 3** + Slick + Pekko Streams で実装 |
 | [IME Simulator](https://github.com/obott9/ime-simulator) | この API を利用する React フロントエンド |
 | [IMEIndicatorClock](https://github.com/obott9/IMEIndicatorClock) | これらのプリセットを使用する macOS デスクトップアプリ |
 | [IMEIndicatorClockW](https://github.com/obott9/IMEIndicatorClockW) | これらのプリセットを使用する Windows デスクトップアプリ |

@@ -116,7 +116,7 @@ public/
 
 | Project | Description |
 |---------|-------------|
-| [play-ime-preset-dashboard](https://github.com/obott9/play-ime-preset-dashboard) | Same API in **Scala 2.13** + Slick + Pekko Streams |
+| [play-ime-preset-dashboard](https://github.com/obott9/play-ime-preset-dashboard) | Same API in **Scala 3** + Slick + Pekko Streams |
 | [IME Simulator](https://github.com/obott9/ime-simulator) | React frontend that consumes this API |
 | [IMEIndicatorClock](https://github.com/obott9/IMEIndicatorClock) | macOS desktop app that uses these presets |
 | [IMEIndicatorClockW](https://github.com/obott9/IMEIndicatorClockW) | Windows desktop app that uses these presets |
